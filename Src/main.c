@@ -11,15 +11,17 @@ void delay (void);
 int main(void)
 {
 	LED_init();
-
+	volatile uint8_t test;  
 	while (1)
 	{
 
+		test = 1; 
 		LED_on();
 		delay();
 		LED_off();
+		test = 0; 
 		delay();
-
+		delay();
 
 	}
 }

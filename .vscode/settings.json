@@ -1,4 +1,10 @@
 {
     "cortex-debug.gdbPath": "C:/D/Tools/ARM_dev_tools/arm-gnu-toolchain/bin/arm-none-eabi-gdb", 
-    "cortex-debug.openocdPath": "C:/D/Tools/ARM_dev_tools/openocd/bin/openocd"
+    "cortex-debug.openocdPath": "C:/D/Tools/ARM_dev_tools/openocd/bin/openocd",
+    "files.associations": {
+        "cmsis_version.h": "c",
+        "core_cm0plus.h": "c",
+        "system_stm32g0xx.h": "c",
+        "stm32g0b1xx.h": "c"
+    }
 }

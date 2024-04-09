@@ -1,0 +1,12 @@
+# ninja log v5
+18	61	7343983077648614	CMakeFiles/template.dir/startup_stm32g0b1retx.s.obj	d710ae7d8c3f3ebb
+10	122	7343983078258755	CMakeFiles/template.dir/Src/main.c.obj	38f731e67203f925
+15	124	7343983078278772	CMakeFiles/template.dir/Src/led.c.obj	8d102d7b944870b1
+13	58	7343984273393465	CMakeFiles/template.dir/startup_stm32g0b1retx.s.obj	34e16153eeac35a5
+9	125	7343984274053614	CMakeFiles/template.dir/Src/led.c.obj	8cbf7d2a0ff58193
+5	125	7343984274053614	CMakeFiles/template.dir/Src/main.c.obj	c5e28ee211df6271
+126	213	7343984274863798	template.elf	24f0b600fd7a641
+3	123	7343985350569013	CMakeFiles/template.dir/Src/main.c.obj	c5e28ee211df6271
+124	205	7343985351319186	template.elf	24f0b600fd7a641
+2	119	7343987255172195	CMakeFiles/template.dir/Src/main.c.obj	c5e28ee211df6271
+120	200	7343987255913861	template.elf	24f0b600fd7a641

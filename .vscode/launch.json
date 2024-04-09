@@ -6,7 +6,7 @@
     "configurations": [
         {
             "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/Debug/RTOS_Course.elf",
+            "executable": "${workspaceRoot}/build/Debug/template.elf",
             "name": "Debug with OpenOCD",
             "request": "launch",
             "type": "cortex-debug",
