@@ -5,6 +5,10 @@
         "cmsis_version.h": "c",
         "core_cm0plus.h": "c",
         "system_stm32g0xx.h": "c",
-        "stm32g0b1xx.h": "c"
+        "stm32g0b1xx.h": "c",
+        "stdint.h": "c",
+        "cstdint": "c",
+        "stdint-gcc.h": "c",
+        "uart.h": "c"
     }
 }

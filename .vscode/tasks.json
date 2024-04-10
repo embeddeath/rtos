@@ -1,0 +1,75 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "echo",
+            "type": "shell",
+            "command": "echo Hello"
+        },
+        {
+            "label" : "Ninja Clean",
+            "group" : "build",
+            "type": "shell", 
+            "command": "ninja", 
+            "args": ["clean"], 
+            "options":{
+                "cwd": "${workspaceFolder}/build/${command:cmake.activeBuildPresetName}"
+            }
+        },
+        {
+            "label" : "Ninja Build",
+            "group" : "build",
+            "type": "shell", 
+            "command": "ninja", 
+            "args": [""], 
+            "options":{
+                "cwd": "${workspaceFolder}/build/${command:cmake.activeBuildPresetName}"
+            }
+        },
+        {
+            "label" : "CMake Debug",
+            "group" : "build",
+            "type": "shell", 
+            "command": "cmake", 
+            "args": ["--preset", "Debug"], 
+            "options":{
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label" : "CMake Release",
+            "group" : "build",
+            "type": "shell", 
+            "command": "cmake", 
+            "args": ["--preset", "Release"], 
+            "options":{
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label" : "OpenOCD Flash",
+            "group" : "build",
+            "type": "shell", 
+            "command": "openocd", 
+            "args": ["-f", "board/st_nucleo_g0.cfg", "-c", "\" program template.elf verify reset \" ", "-c", "shutdown"], 
+            "options":{
+                "cwd": "${workspaceFolder}/build/${command:cmake.activeBuildPresetName}"
+            }
+        },
+    ]
+}
+
+
+
+//"type": "cmake",
+//"label": "CMake: build",
+//"command": "build",
+//"targets": [
+//    "all"
+//],
+//"preset": "${command:cmake.activeBuildPresetName}",
+//"group": "build",
+//"problemMatcher": [],
+//"detail": "CMake template build task"
