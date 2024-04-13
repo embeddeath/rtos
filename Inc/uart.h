@@ -5,9 +5,14 @@
  *      Author: marqu
  */
 
-#ifndef UART_H_
-#define UART_H_
+#pragma once
+#include "stdint.h"
 
 
-
-#endif /* UART_H_ */
+/* This function initializes Uart2
+    Uart2 is connected to the embedded debugger on the Nucleo Board
+    through pins PA2 and PA3
+*/
+extern void uart_2_tx_init(void);
+extern void uart_2_char_tx (uint8_t character_to_send); 
+extern void uart_2_put_string(char *string_ptr);

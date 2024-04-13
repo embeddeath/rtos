@@ -5,23 +5,30 @@
 #include <stdint.h>
 #include <stm32g0b1xx.h>
 #include "led.h"
+#include "uart.h"
+#include "stdlib.h"
+#include "timebase.h"
 
 void delay (void);
 
 int main(void)
 {
 	LED_init();
-	volatile uint8_t test;  
+	uart_2_tx_init(); 
+	timebaseInit(); 
+
+	char print_buffer[100] = "SystickExpired\n"; 
+	uint32_t current_systick_value; 
+
 	while (1)
 	{
 
-		test = 1; 
-		LED_on();
-		delay();
-		LED_off();
-		test = 0; 
-		delay();
-		delay();
+		if (isSystickExpired())
+		{
+			uart_2_put_string(print_buffer); 
+		}
+
+		current_systick_value = getCurrentSysTickValue(); 
 
 	}
 }
@@ -52,3 +59,4 @@ void delay (void)
 		__NOP();
 	}
 }
+

@@ -47,6 +47,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     Src/main.c
     Src/led.c
+    Src/uart.c
+    Src/timebase.c
     startup_stm32g0b1retx.s
 )
 

@@ -9,6 +9,10 @@
         "stdint.h": "c",
         "cstdint": "c",
         "stdint-gcc.h": "c",
-        "uart.h": "c"
+        "uart.h": "c",
+        "stdlib.h": "c",
+        "timebase.h": "c",
+        "stdbool.h": "c",
+        "stddef.h": "c"
     }
 }
