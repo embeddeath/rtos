@@ -8,6 +8,7 @@
 #include "uart.h"
 #include "stdlib.h"
 #include "timebase.h"
+#include <stdbool.h>
 
 void delay (void);
 
@@ -17,46 +18,16 @@ int main(void)
 	uart_2_tx_init(); 
 	timebaseInit(); 
 
-	char print_buffer[100] = "SystickExpired\n"; 
-	uint32_t current_systick_value; 
-
 	while (1)
 	{
-
-		if (isSystickExpired())
-		{
-			uart_2_put_string(print_buffer); 
-		}
-
-		current_systick_value = getCurrentSysTickValue(); 
-
+		LED_on();
+		uart_2_put_string("Led ON\n"); 
+		delay_ms(1000);  
+		LED_off();
+		uart_2_put_string("Led OFF\n");
+		delay_ms(1000);  			
 	}
 }
 
 
-
-
-void delay (void)
-{
-	for (uint32_t i = 0; i < 65000; i++ )
-	{
-		__NOP();
-	}
-	for (uint32_t i = 0; i < 65000; i++ )
-	{
-		__NOP();
-	}
-	for (uint32_t i = 0; i < 65000; i++ )
-	{
-		__NOP();
-	}
-	for (uint32_t i = 0; i < 65000; i++ )
-	{
-		__NOP();
-	}
-	for (uint32_t i = 0; i < 65000; i++ )
-	{
-		__NOP();
-	}
-}
 
