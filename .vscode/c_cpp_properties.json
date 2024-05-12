@@ -7,14 +7,14 @@
                 "${workspaceFolder}/Drivers/CMSIS/Device",
                 "${workspaceFolder}/Drivers/CMSIS/Include",
                 "${workspaceFolder}/Inc", 
-                "C:/D/Tools/ARM_dev_tools/arm-gnu-toolchain/lib/gcc/arm-none-eabi/13.2.1/include"
+                "D:/Tools/Toolchains/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ], 
-            "compilerPath": "C:/D/Tools/ARM_dev_tools/arm-gnu-toolchain/bin/arm-none-eabi-gcc", 
+            "compilerPath": "D:/Tools/Toolchains/gcc-arm-none-eabi-10.3-2021.10/bin/arm-none-eabi-gcc", 
             "intelliSenseMode": "gcc-arm" 
         }
     ],
