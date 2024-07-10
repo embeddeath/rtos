@@ -1,5 +1,5 @@
 {
-    "cortex-debug.gdbPath": "D:/Tools/Toolchains/gcc-arm-none-eabi-10.3-2021.10/binarm-none-eabi-gdb", 
+    "cortex-debug.gdbPath": "D:/Tools/Toolchains/gcc-arm-none-eabi-10.3-2021.10/bin/arm-none-eabi-gdb", 
     "cortex-debug.openocdPath": "D:/Tools/openocd/bin/openocd",
     "files.associations": {
         "cmsis_version.h": "c",
@@ -16,5 +16,5 @@
         "stddef.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": false,
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
 }

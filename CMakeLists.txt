@@ -48,7 +48,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/main.c
     Src/led.c
     Src/uart.c
-    Src/timebase.c
+    Src/osKernel.c
+    Src/debugPins.c
     startup_stm32g0b1retx.s
 )
 
