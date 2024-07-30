@@ -4,29 +4,69 @@
 
 #include <stdint.h>
 #include <stm32g0b1xx.h>
+#include "osKernel.h"
 #include "led.h"
 #include "uart.h"
 #include "stdlib.h"
-#include "timebase.h"
+#include "debugPins.h"
 #include <stdbool.h>
 
-void delay (void);
+#define TIME_QUANTA 10U
+
+typedef uint32_t taskProfiler_t; 
+
+taskProfiler_t task0_Profiler, task1_Profiler, task2_Profiler; 
+
+void task0 (void)
+{
+	while (1)
+	{
+		task0_Profiler++;
+		debugPinToggle(DEBUG_PIN_0);
+		uart_2_put_string("Task0 running \n"); 
+
+	}
+}
+
+void task1 (void)
+{
+	while (1)
+	{
+		task1_Profiler++;
+		debugPinToggle(DEBUG_PIN_1);
+		uart_2_put_string("Task1 running \n");
+
+	}
+}
+
+void task2 (void)
+{
+	while (1)
+	{
+		task2_Profiler++;
+		debugPinToggle(DEBUG_PIN_2);
+		uart_2_put_string("Task2 running \n");
+	}
+}
 
 int main(void)
 {
+	/* Initialize device drivers */
 	LED_init();
-	uart_2_tx_init(); 
-	timebaseInit(); 
+	uart_2_tx_init();
+	debugPinsInit();
+	
+	/* Initialize Kernel. */
+	osKernel_Init();
 
-	while (1)
-	{
-		LED_on();
-		uart_2_put_string("Led ON\n"); 
-		delay_ms(1000);  
-		LED_off();
-		uart_2_put_string("Led OFF\n");
-		delay_ms(1000);  			
-	}
+	/* Initialize Tasks*/
+	osKernel_AddTasks(task0, task1, task2);
+
+	/* Set RoundRobin time quanta. */ 
+	osKernel_Launch(TIME_QUANTA); 
+
+
+	while (1); 
 }
 
 

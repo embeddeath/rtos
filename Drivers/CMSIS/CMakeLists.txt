@@ -23,6 +23,7 @@ target_sources(Drivers INTERFACE
     #Source Files Go here
     ../../Src/main.c
     ../../Src/led.c
+    ../../Src/osKernel.c
     ../../../startup_stm32g0b1retx.s
 
 )
