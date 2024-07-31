@@ -15,7 +15,9 @@
 
 typedef uint32_t taskProfiler_t; 
 
-taskProfiler_t task0_Profiler, task1_Profiler, task2_Profiler; 
+taskProfiler_t task0_Profiler, task1_Profiler, task2_Profiler, task3_Profiler; 
+
+
 
 void task0 (void)
 {
@@ -23,7 +25,8 @@ void task0 (void)
 	{
 		task0_Profiler++;
 		debugPinToggle(DEBUG_PIN_0);
-		uart_2_put_string("Task0 running \n"); 
+		uart_2_put_string("Task0 running \n");
+		osKernel_TaskYield();  
 
 	}
 }
@@ -47,6 +50,12 @@ void task2 (void)
 		debugPinToggle(DEBUG_PIN_2);
 		uart_2_put_string("Task2 running \n");
 	}
+}
+
+void task3 (void)
+{
+	task3_Profiler++; 
+	uart_2_put_string("Task3 - 100ms\n"); 
 }
 
 int main(void)

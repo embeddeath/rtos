@@ -1,11 +1,6 @@
 
 #include "osKernel.h"
-
-
-#define HSI16_FREQ 16000000
-#define BUS_FREQUENCY HSI16_FREQ
-uint32_t MILLIS_PRESCALER; 
-
+#include "stdbool.h"
 
 typedef enum 
 {
@@ -100,13 +95,12 @@ typedef enum
 /* Used to init top of the stack for debugging purposes. */
 #define     STACKFRAME_TOP_DUMMY_INIT_VAL   0xCAFEBABE
 
-
 /* xPSR bit definitions */
 #define xPSR_THUMB_BIT_POS                  24
 #define xPSR_THUMB_BIT_MASK                 (1U << xPSR_THUMB_BIT_POS)
 
 
-
+/* Task control block. */
 typedef struct tcb
 {
     int32_t *stackPointer; 
@@ -118,8 +112,19 @@ tcb_t *currentTcbPointer;
 
 int32_t tcbs_stack[MAX_NUM_OF_TASKS][STACKSIZE]; 
 
+/* Timing related variables and definitions. */
+#define HSI16_FREQ 16000000
+#define BUS_FREQUENCY HSI16_FREQ
+
+#define PERIODIC_TASK_PERIOD_MS 100U
+uint32_t periodic_task_tick; 
+uint32_t MILLIS_PRESCALER; 
+uint32_t osKernel_quanta; 
+bool taskYield_flag; 
+
 void osKernel_StackInit(task_index_t index); 
 void osKernel_SchedulerLaunch(void); 
+void osKernel_RoundRobinScheduler(void);
 
 /* 
     Function Name: osKernel_StackInit
@@ -259,6 +264,7 @@ void osKernel_Launch(uint32_t quanta)
     SysTick->VAL = 0; 
 
     /* Load quanta, substracting one because timer starts counting from zero.*/
+    osKernel_quanta = quanta; 
     SysTick->LOAD = (quanta * MILLIS_PRESCALER) - 1; 
 
     /* Set systick interrupt to low priority */
@@ -315,9 +321,6 @@ __attribute__((naked)) void SysTick_Handler (void)
     __asm("MOV R4, R11"); 
     __asm("PUSH {R4}"); 
 
-    /* R12 is already saved.*/
-    // __asm("MOV R4, R12"); 
-    // __asm("PUSH {R4}"); 
     /* -----------------------------------------------------------------------------------------------------------*/
 
 
@@ -328,10 +331,7 @@ __attribute__((naked)) void SysTick_Handler (void)
     /*  Load R1 from address equals R0, i.e r1 ) currentTcbPointer.
         LDR Rx, [Rn]
         When using the LDR instruction with "[Rn]", you are indicating that the processor should load the 
-        value forom the memory address contained in Rn into Rx. 
-
-        Up to this point, R1 stores the equivalent of currentTcbPointer->stackPointer
-        ToDo: 
+        value forom the memory address contained in Rn into Rx.  
     */
     __asm("LDR R1,[R0]"); 
 
@@ -340,12 +340,19 @@ __attribute__((naked)) void SysTick_Handler (void)
     __asm("STR R4,[R1]"); 
 
     /* Choose next Thread*/
+    /* Not a good way to time periodic tasks with systick since it is modified by the taskYield function
+    and might not give exact time. */
+    __asm("PUSH {R0,LR}");
+    __asm("BL osKernel_RoundRobinScheduler"); 
+  
+    /* Restore R0 */
+    __asm("POP {R0}");
 
-    /* Load R1 fom a location 4 bytes above address R1, i.e  r1 = currentTcbPointer->nextTcbPointer*/
-    __asm("LDR R1,[R1, #4]"); 
+    /* Pop LR data*/
+    __asm("POP {R1}");
+    __asm("MOV LR, R1"); 
 
-    /* Store R1 at address equals r0, i.e currentTcbPointer = R1*/
-    __asm("STR R1,[R0]"); 
+    __asm("LDR R1, [R0]"); 
 
     /* Load Cortex-M SP(R13) from address equals R1, i.e SP = currentTcbPointer->stackPointer*/
     __asm("LDR R4,[R1]");
@@ -381,7 +388,7 @@ __attribute__((naked)) void SysTick_Handler (void)
     __asm("CPSIE   I"); 
     
     /* Return from exception and restore r0, r1, r2, r3, r12, lr, pc, consider GNU assembly language course for the future.*/
-    __asm("BX   LR"); 
+    __asm("BX   LR");
     
 } 
 
@@ -471,3 +478,41 @@ void osKernel_SchedulerLaunch (void)
     __asm("BX   LR"); 
 
 }
+
+
+/* 
+    This function triggers a systick exception, forcing
+    the next task to run, therefore making the task cooperative. 
+
+    In a cooperative scheduler, the operating ystem never initiates a context switch 
+    from a running process to another process. Instead, in order to run multiple applications
+    concurrently, processes voluntarily yield control periodically or when idle or logically blocked. 
+
+    This type of multitasking is called cooperative becauseall programs must cooperatefor scheduling
+    scheme to work. 
+
+*/
+void osKernel_TaskYield (void)
+{
+    /*Clear the systick value register and trigger a systick exception. */
+    SysTick->VAL = 0; /* Potentially not a good idea to clear manually*/
+    SCB->ICSR |= SCB_ICSR_PENDSTSET_Msk;
+
+
+    
+}
+
+
+extern void task3(void); 
+
+void osKernel_RoundRobinScheduler(void)
+{
+    if ((++periodic_task_tick) >= (10))
+    {
+        (*task3)();
+        periodic_task_tick = 0; 
+    }
+
+    currentTcbPointer = currentTcbPointer->nextTcbPointer; 
+}
+
